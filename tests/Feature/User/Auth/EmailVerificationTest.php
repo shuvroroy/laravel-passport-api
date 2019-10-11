@@ -4,6 +4,7 @@ namespace Tests\Feature\User\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,7 +25,7 @@ class EmailVerificationTest extends TestCase
         Notification::assertNothingSent();
 
         $this->json('POST', $url)
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'message'
             ]);
@@ -40,7 +41,7 @@ class EmailVerificationTest extends TestCase
         $url = URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), ['user' => $this->user->id]);
 
         $this->json('POST', $url)
-            ->assertStatus(400)
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonStructure([
                 'message'
             ]);
@@ -56,7 +57,7 @@ class EmailVerificationTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->json('POST', route('verification.resend'), ['email' => $user->email])
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'message'
             ]);
@@ -68,7 +69,7 @@ class EmailVerificationTest extends TestCase
     public function it_can_not_resend_verification_notification_if_email_does_not_exist()
     {
         $this->json('POST', route('verification.resend'), ['email' => 'invalid-email'])
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -83,7 +84,7 @@ class EmailVerificationTest extends TestCase
         Notification::fake();
 
         $this->json('POST', route('verification.resend'), ['email' => $this->user->email])
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [

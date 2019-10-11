@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\Setting;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\User\Setting\PasswordUpdateFormRequest;
@@ -19,6 +20,6 @@ class PasswordController extends Controller
 
         return (new UserResource($user))
             ->response()
-            ->setStatusCode(202);
+            ->setStatusCode(Response::HTTP_ACCEPTED);
     }
 }

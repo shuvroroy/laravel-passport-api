@@ -4,6 +4,7 @@ namespace Tests\Feature\User\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,7 +17,7 @@ class LoginTest extends TestCase
     public function it_requires_email_and_password()
     {
         $this->json('POST', route('login'))
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -35,7 +36,7 @@ class LoginTest extends TestCase
         ];
 
         $this->json('POST', route('login'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -55,7 +56,7 @@ class LoginTest extends TestCase
         ];
 
         $this->json('POST', route('login'), $data)
-            ->assertStatus(403)
+            ->assertStatus(Response::HTTP_FORBIDDEN)
             ->assertJsonStructure([
                 'message'
             ]);
@@ -72,7 +73,7 @@ class LoginTest extends TestCase
         Artisan::call('passport:install');
 
         $this->json('POST', route('login'), $data)
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'data' => [
                     'id',
@@ -93,7 +94,7 @@ class LoginTest extends TestCase
         Passport::actingAs($this->user);
 
         $this->json('POST', route('logout'))
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'message'
             ]);

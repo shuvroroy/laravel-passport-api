@@ -3,6 +3,7 @@
 namespace Tests\Feature\User\Setting;
 
 use Tests\TestCase;
+use Illuminate\Http\Response;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,7 +21,7 @@ class UpdatePasswordTest extends TestCase
                 'password' => 'password1',
                 'password_confirmation' => 'password1'
             ])
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -39,7 +40,7 @@ class UpdatePasswordTest extends TestCase
                 'password' => 'password1',
                 'password_confirmation' => 'password2'
             ])
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -58,7 +59,7 @@ class UpdatePasswordTest extends TestCase
                 'password' => 'password1',
                 'password_confirmation' => 'password1'
             ])
-            ->assertStatus(202)
+            ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
                 'data' => [
                     'id',

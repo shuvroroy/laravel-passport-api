@@ -4,6 +4,7 @@ namespace Tests\Feature\User\Setting;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,7 +26,7 @@ class UpdateProfileTest extends TestCase
         Passport::actingAs($this->user);
 
         $this->json('PATCH', route('profile.update'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -43,7 +44,7 @@ class UpdateProfileTest extends TestCase
                 'name' => $name = 'John Doe',
                 'email' => $email = 'john@example.com',
             ])
-            ->assertStatus(202)
+            ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
                 'data' => [
                     'id',

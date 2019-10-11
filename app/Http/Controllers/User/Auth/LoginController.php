@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Validation\ValidationException;
@@ -21,7 +22,7 @@ class LoginController extends Controller
         if (!$request->user()->hasVerifiedEmail()) {
             return response()->json([
                 'message' => trans('verification.unverified')
-            ], 403);
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $token = $request->user()->createToken('Personal Access Token')->accessToken;
@@ -42,6 +43,6 @@ class LoginController extends Controller
 
         return response()->json([
             'message' => trans('auth.logout')
-        ], 200);
+        ], Response::HTTP_OK);
     }
 }

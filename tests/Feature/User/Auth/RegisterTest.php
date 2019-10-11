@@ -4,6 +4,7 @@ namespace Tests\Feature\User\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Notifications\User\Auth\EmailVerificationNotification;
@@ -16,7 +17,7 @@ class RegisterTest extends TestCase
     public function it_requires_name_valid_email_password_and_password_confirmation()
     {
         $this->json('POST', route('register'))
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -35,7 +36,7 @@ class RegisterTest extends TestCase
         ];
 
         $this->json('POST', route('register'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -53,7 +54,7 @@ class RegisterTest extends TestCase
         ];
 
         $this->json('POST', route('register'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -77,7 +78,7 @@ class RegisterTest extends TestCase
         Notification::assertNothingSent();
 
         $this->json('POST', route('register'), $data)
-            ->assertStatus(201)
+            ->assertStatus(Response::HTTP_CREATED)
             ->assertJsonStructure([
                 'message'
             ]);

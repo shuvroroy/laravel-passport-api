@@ -4,6 +4,7 @@ namespace Tests\Feature\User\Auth;
 
 use Tests\TestCase;
 use App\Models\PasswordReset;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,7 +21,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $this->json('POST', route('password.reset'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -39,7 +40,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $this->json('POST', route('password.reset'), $data)
-            ->assertStatus(422)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => [
@@ -60,7 +61,7 @@ class ResetPasswordTest extends TestCase
         Notification::assertNothingSent();
 
         $this->json('POST', route('password.email'), $data)
-            ->assertStatus(201)
+            ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
                 'message'
             ]);
@@ -75,9 +76,9 @@ class ResetPasswordTest extends TestCase
         ];
 
         $this->json('POST', route('password.reset'), $updateData)
-            ->assertStatus(202)
-            ->assertJson([
-                'message' => 'Your password has been reset!'
+            ->assertStatus(Response::HTTP_ACCEPTED)
+            ->assertJsonStructure([
+                'message'
             ]);
     }
 }

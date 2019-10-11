@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PasswordReset;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Auth\ForgotPasswordFormRequest;
 use App\Notifications\User\Auth\PasswordResetNotification;
@@ -34,6 +35,6 @@ class ForgotPasswordController extends Controller
 
         return response()->json([
             'message' => trans('passwords.sent')
-        ], 201);
+        ], Response::HTTP_ACCEPTED);
     }
 }

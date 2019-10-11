@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
@@ -17,20 +18,20 @@ class EmailVerificationController extends Controller
         if (! URL::hasValidSignature($request)) {
             return response()->json([
                 'message' => trans('verification.invalid'),
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if ($user->hasVerifiedEmail()) {
             return response()->json([
                 'message' => trans('verification.already_verified'),
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $user->markEmailAsVerified();
 
         return response()->json([
             'message' => trans('verification.verified'),
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function resend(VerificationFormRequest $request)
@@ -49,6 +50,6 @@ class EmailVerificationController extends Controller
 
         return response()->json([
             'message' => trans('verification.sent')
-        ]);
+        ], Response::HTTP_OK);
     }
 }
