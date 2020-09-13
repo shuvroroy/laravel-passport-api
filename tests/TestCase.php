@@ -15,6 +15,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->states('verified')->create();
+        $this->user = User::factory()->verified()->create();
     }
 }

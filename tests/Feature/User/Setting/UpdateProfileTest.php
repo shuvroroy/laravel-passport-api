@@ -15,7 +15,7 @@ class UpdateProfileTest extends TestCase
     /** @test */
     public function it_requires_a_unique_email()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'john@example.com'
         ]);
 

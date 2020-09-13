@@ -13,9 +13,10 @@ class UserTest extends TestCase
     /** @test */
     public function it_can_hashes_the_password_when_creating()
     {
-        $user = factory(User::class)->create([
-            'password' => 'password'
-        ]);
+        $user = User::factory()
+            ->create([
+                'password' => 'password'
+            ]);
 
         $this->assertNotEquals($user->password, 'password');
     }

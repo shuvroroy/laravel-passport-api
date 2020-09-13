@@ -48,7 +48,7 @@ class LoginTest extends TestCase
     /** @test */
     public function it_returns_message_if_email_is_not_verified_on_login()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();;
 
         $data = [
             'email' => $user->email,

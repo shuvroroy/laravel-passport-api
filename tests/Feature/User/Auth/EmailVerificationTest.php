@@ -19,7 +19,7 @@ class EmailVerificationTest extends TestCase
     {
         Notification::fake();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $url = URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), ['user' => $user->id]);
 
         Notification::assertNothingSent();
@@ -54,7 +54,7 @@ class EmailVerificationTest extends TestCase
     {
         Notification::fake();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->json('POST', route('verification.resend'), ['email' => $user->email])
             ->assertStatus(Response::HTTP_OK)
